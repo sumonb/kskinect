@@ -5,8 +5,10 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:ks.kinect.wpf"
         mc:Ignorable="d"
-        Title="MainWindow" Height="350" Width="525">
+        Title="MainWindow" Height="350" Width="525"
+        Closed="Window_Closed" WindowStyle="None">
     <Grid>
-        
+        <Image Name="camera" Width="1920" Height="1080" />
+        <Canvas Name="canvas" Width="1920" Height="1080" />
     </Grid>
 </Window>
