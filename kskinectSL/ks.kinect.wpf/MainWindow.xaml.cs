@@ -32,9 +32,10 @@ namespace ks.kinect.wpf
         private readonly ColorFrameReader _colorReader = null;
         private readonly InfraredFrameReader _infraredReader = null;
         private readonly DepthFrameReader _depthReader = null;
+        private readonly BodyFrameReader _bodyReader = null;
 
 
-        private Constants.CameraMode _mode = Constants.CameraMode.Color;
+        private Visualization _mode = Visualization.Color;
 
         public MainWindow()
         {
@@ -52,11 +53,44 @@ namespace ks.kinect.wpf
 
             _depthReader.DepthFrameSource.OpenReader();
             _depthReader.FrameArrived += DepthReader_FrameArrived;
+
+            _bodyReader.BodyFrameSource.OpenReader();
+            _bodyReader.FrameArrived += BodyReader_FrameArrived;
+        }
+
+        void BodyReader_FrameArrived(object sender, BodyFrameArrivedEventArgs e)
+        {
+            using (var frame = e.FrameReference.AcquireFrame())
+            {
+                if (frame == null) return;
+
+                var bodies = frame.Bodies();
+                foreach (var currentBody in bodies)
+                {
+                    
+                    foreach (var currentJoint in currentBody.TrackedJoints())
+                    {
+                        var currentPosition = currentJoint.Position.ToPoint(_mode);
+
+                        // Draw
+                        Ellipse ellipse = new Ellipse
+                        {
+                            Fill = Brushes.Red,
+                            Width = 30,
+                            Height = 30
+                        };
+                        Canvas.SetLeft(ellipse, currentPosition.X - ellipse.Width / 2);
+                        Canvas.SetTop(ellipse, currentPosition.Y - ellipse.Height / 2);
+
+                        canvas.Children.Add(ellipse);
+                    }
+                }
+            }
         }
 
         void DepthReader_FrameArrived(object sender, DepthFrameArrivedEventArgs e)
         {
-            if (_mode == Constants.CameraMode.Depth)
+            if (_mode == Visualization.Depth)
             {
                 using (var frame = e.FrameReference.AcquireFrame())
                 {
@@ -70,7 +104,7 @@ namespace ks.kinect.wpf
 
         void ColorReader_FrameArrived(object sender, ColorFrameArrivedEventArgs e)
         {
-            if (_mode == Constants.CameraMode.Color)
+            if (_mode == Visualization.Color)
             {
                 using (var frame = e.FrameReference.AcquireFrame())
                 {
@@ -78,12 +112,12 @@ namespace ks.kinect.wpf
                     camera.Source = frame.ToBitmap();
                 }
             }
-
+            
         }
 
         void InfraredReader_FrameArrived(object sender, InfraredFrameArrivedEventArgs e)
         {
-            if (_mode == Constants.CameraMode.Infrared)
+            if (_mode == Visualization.Infrared)
             {
                 using (var frame = e.FrameReference.AcquireFrame())
                 {
@@ -102,6 +136,21 @@ namespace ks.kinect.wpf
                 _colorReader.Dispose();
             }
 
+            if (_infraredReader != null)
+            {
+                _infraredReader.Dispose();
+            }
+
+            if (_depthReader != null)
+            {
+                _depthReader.Dispose();
+            }
+
+            if (_bodyReader != null)
+            {
+                _bodyReader.Dispose();
+
+            }
             if (_sensor != null)
             {
                 _sensor.Close();
