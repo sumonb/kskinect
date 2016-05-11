@@ -14,7 +14,7 @@ using System.Windows.Navigation;
 using System.Windows.Shapes;
 
 using Microsoft.Kinect;
-using System.Windows.Media.Imaging;
+//using System.Windows.Media.Imaging;
 using ks.kinect.ext;
 using LightBuzz.Vitruvius;
 
@@ -43,18 +43,18 @@ namespace ks.kinect.wpf
 
             _sensor = KinectSensor.GetDefault();
             if (_sensor == null) return;
+            _sensor.Open();
 
-
-            _colorReader.ColorFrameSource.OpenReader();
+            _colorReader = _sensor.ColorFrameSource.OpenReader();
             _colorReader.FrameArrived += ColorReader_FrameArrived;
 
-            _infraredReader.InfraredFrameSource.OpenReader();
+            _infraredReader = _sensor.InfraredFrameSource.OpenReader();
             _infraredReader.FrameArrived += InfraredReader_FrameArrived;
 
-            _depthReader.DepthFrameSource.OpenReader();
+            _depthReader = _sensor.DepthFrameSource.OpenReader();
             _depthReader.FrameArrived += DepthReader_FrameArrived;
 
-            _bodyReader.BodyFrameSource.OpenReader();
+            _bodyReader = _sensor.BodyFrameSource.OpenReader();
             _bodyReader.FrameArrived += BodyReader_FrameArrived;
         }
 
@@ -63,27 +63,38 @@ namespace ks.kinect.wpf
             using (var frame = e.FrameReference.AcquireFrame())
             {
                 if (frame == null) return;
+                canvas.Children.Clear();
 
                 var bodies = frame.Bodies();
+                var bodyCount = bodies.TrackedBodyCount();
+                if (bodyCount > 0)
+                {
+                    lbl.Content = "who is here";
+                }
+                else
+                {
+                    lbl.Content = "";
+                }
                 foreach (var currentBody in bodies)
                 {
-                    
-                    foreach (var currentJoint in currentBody.TrackedJoints())
-                    {
-                        var currentPosition = currentJoint.Position.ToPoint(_mode);
+                    if (currentBody.IsTracked == false) continue;
 
-                        // Draw
-                        Ellipse ellipse = new Ellipse
+                        foreach (var currentJoint in currentBody.TrackedJoints())
                         {
-                            Fill = Brushes.Red,
-                            Width = 30,
-                            Height = 30
-                        };
-                        Canvas.SetLeft(ellipse, currentPosition.X - ellipse.Width / 2);
-                        Canvas.SetTop(ellipse, currentPosition.Y - ellipse.Height / 2);
+                            var currentPosition = currentJoint.Position.ToPoint(_mode);
 
-                        canvas.Children.Add(ellipse);
-                    }
+                            // Draw
+                            Ellipse ellipse = new Ellipse
+                            {
+                                Fill = Brushes.Red,
+                                Width = 30,
+                                Height = 30
+                            };
+                            Canvas.SetLeft(ellipse, currentPosition.X - ellipse.Width / 2);
+                            Canvas.SetTop(ellipse, currentPosition.Y - ellipse.Height / 2);
+
+                            canvas.Children.Add(ellipse);
+                        }
                 }
             }
         }
@@ -112,7 +123,7 @@ namespace ks.kinect.wpf
                     camera.Source = frame.ToBitmap();
                 }
             }
-            
+
         }
 
         void InfraredReader_FrameArrived(object sender, InfraredFrameArrivedEventArgs e)
