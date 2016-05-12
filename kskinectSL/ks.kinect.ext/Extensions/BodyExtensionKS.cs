@@ -11,7 +11,7 @@ namespace ks.kinect.ext
 {
     public static class BodyExtensionKS
     {
-        public static IList<Body> TrackedBody(this IEnumerable<Body> bodies)
+        public static IList<Body> TrackedBodyKS(this IEnumerable<Body> bodies)
         {
             IList<Body> returnBodies = new List<Body>();
             if (bodies != null)
@@ -21,7 +21,7 @@ namespace ks.kinect.ext
             return null;
         }
 
-        public static int TrackedBodyCount(this IEnumerable<Body> bodies)
+        public static int TrackedBodyCountKS(this IEnumerable<Body> bodies)
         {
             IList<Body> returnBodies = new List<Body>();
             if (bodies != null)

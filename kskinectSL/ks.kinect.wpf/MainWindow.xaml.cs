@@ -56,6 +56,8 @@ namespace ks.kinect.wpf
 
             _bodyReader = _sensor.BodyFrameSource.OpenReader();
             _bodyReader.FrameArrived += BodyReader_FrameArrived;
+
+            
         }
 
         void BodyReader_FrameArrived(object sender, BodyFrameArrivedEventArgs e)
@@ -66,7 +68,7 @@ namespace ks.kinect.wpf
                 canvas.Children.Clear();
 
                 var bodies = frame.Bodies();
-                var bodyCount = bodies.TrackedBodyCount();
+                var bodyCount = bodies.TrackedBodyCountKS();
                 if (bodyCount > 0)
                 {
                     lbl.Content = "who is here";
