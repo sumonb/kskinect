@@ -9,11 +9,11 @@ using System.Windows.Shapes;
 using LightBuzz.Vitruvius;
 using Microsoft.Kinect;
 
-namespace ks.kinect.ext.Extensions
+namespace ks.kinect.ext
 {
     public static class CanvasExtensionKs
     {
-        public static void MarkBodyJoinKS(this Canvas canvas, Visualization visualizationMode, IEnumerable<Body> bodies, SolidColorBrush jointBrushColor)
+        public static void MarkBodyJointKS(this Canvas canvas, Visualization visualizationMode, IEnumerable<Body> bodies, SolidColorBrush jointBrushColor)
         {
             foreach (var currentBody in bodies)
             {
