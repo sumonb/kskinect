@@ -35,7 +35,7 @@ namespace ks.kinect.wpf
         private readonly BodyFrameReader _bodyReader = null;
 
 
-        private Visualization _mode = Visualization.Color;
+        private Visualization _mode = Visualization.Infrared;
 
         public MainWindow()
         {
@@ -77,27 +77,8 @@ namespace ks.kinect.wpf
                 {
                     lbl.Content = "";
                 }
-                foreach (var currentBody in bodies)
-                {
-                    if (currentBody.IsTracked == false) continue;
 
-                        foreach (var currentJoint in currentBody.TrackedJoints())
-                        {
-                            var currentPosition = currentJoint.Position.ToPoint(_mode);
-
-                            // Draw
-                            Ellipse ellipse = new Ellipse
-                            {
-                                Fill = Brushes.Red,
-                                Width = 30,
-                                Height = 30
-                            };
-                            Canvas.SetLeft(ellipse, currentPosition.X - ellipse.Width / 2);
-                            Canvas.SetTop(ellipse, currentPosition.Y - ellipse.Height / 2);
-
-                            canvas.Children.Add(ellipse);
-                        }
-                }
+                canvas.MarkBodyJointKS(_mode, bodies, Brushes.Aqua);
             }
         }
 
