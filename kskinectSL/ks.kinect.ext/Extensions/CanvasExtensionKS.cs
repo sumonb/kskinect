@@ -13,7 +13,7 @@ namespace ks.kinect.ext
 {
     public static class CanvasExtensionKs
     {
-        public static void MarkBodyJointKS(this Canvas canvas, Visualization visualizationMode, IEnumerable<Body> bodies, SolidColorBrush jointBrushColor)
+        public static void MarkBodyJoint_Ks(this Canvas canvas, Visualization visualizationMode, IEnumerable<Body> bodies, SolidColorBrush jointBrushColor)
         {
             foreach (var currentBody in bodies)
             {
@@ -37,6 +37,15 @@ namespace ks.kinect.ext
                     canvas.Children.Add(ellipse);
                 }
             }
+        }
+
+
+        /// <summary>
+        /// Clears the visual data from the canvas.
+        /// </summary>
+        public static void Clear_Ks(this Canvas canvas)
+        {
+            canvas.Children.Clear();
         }
     }
 }

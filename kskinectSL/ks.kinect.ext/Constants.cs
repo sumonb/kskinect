@@ -9,7 +9,7 @@ namespace ks.kinect.ext
 {
     public class Constants
     {
-        public readonly List<Tuple<JointType, JointType>> Body_Connections_Points = new List<Tuple<JointType, JointType>>
+        public static readonly List<Tuple<JointType, JointType>> Body_Connections_Points = new List<Tuple<JointType, JointType>>
         {
             // Torso
             new Tuple<JointType, JointType>(JointType.Head, JointType.Neck),

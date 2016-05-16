@@ -68,7 +68,7 @@ namespace ks.kinect.wpf
                 canvas.Children.Clear();
 
                 var bodies = frame.Bodies();
-                var bodyCount = bodies.TrackedBodyCountKS();
+                var bodyCount = bodies.TrackedBodyCount_Ks();
                 if (bodyCount > 0)
                 {
                     lbl.Content = "who is here";
@@ -78,7 +78,7 @@ namespace ks.kinect.wpf
                     lbl.Content = "";
                 }
 
-                canvas.MarkBodyJointKS(_mode, bodies, Brushes.Aqua);
+                canvas.MarkBodyJoint_Ks(_mode, bodies, Brushes.Aqua);
             }
         }
 

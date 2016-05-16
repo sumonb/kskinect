@@ -51,6 +51,7 @@
     <Reference Include="WindowsBase" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="BodyVisualManager.cs" />
     <Compile Include="Constants.cs" />
     <Compile Include="Extensions\BodyExtensionKS.cs" />
     <Compile Include="Extensions\CanvasExtensionKS.cs" />
